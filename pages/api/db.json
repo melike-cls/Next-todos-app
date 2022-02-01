@@ -1,0 +1,18 @@
+{
+	"tasks": [
+		{
+			"id": 1643718566727,
+			"title": "Example Todo 1",
+			"memo": null,
+			"checked": true,
+			"pinned": false
+		},
+		{
+			"id": 1643718584922,
+			"title": "Example Todo 2",
+			"memo": "Example Todo memo text",
+			"checked": false,
+			"pinned": false
+		}
+	]
+}
