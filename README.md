@@ -18,7 +18,9 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 ## Tasks
 
 -   Build the design according to `design.png` (you can choose any colors and any icons by yourself)
+
     User should be able to:
+
 -   create new todo
 -   remove todo
 -   add memo to todo
