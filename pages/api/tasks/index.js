@@ -22,8 +22,8 @@ export default function handler(req, res) {
 					pinned: false,
 				}
 
-				if (req.body.title) task.title = req.body.title
-				if (req.body.memo) task.memo = req.body.memo
+				if ('title' in req.body) task.title = req.body.title
+				if ('memo' in req.body) task.memo = req.body.memo
 
 				data.push(task)
 				db.set('tasks', data)
