@@ -17,7 +17,10 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 ## Tasks
 
--   Build the design according to `design.png` (you can choose any colors and any icons by yourself)
+-   Build the design according to `design.png` (as pixel perfect as possible)
+
+*   You can find design details in `design_details.png`
+*   You can replace the icons with the icon you want.
 
     User should be able to:
 
