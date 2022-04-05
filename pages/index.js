@@ -1,15 +1,41 @@
 import Head from "next/head";
 import Todo from "../components/Todo";
 import styles from "../styles/Home.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AiOutlineAlignLeft } from "react-icons/ai";
 
 export default function Home() {
-  // console.log("TASKS: ", tasks);
-
   const [input, setInput] = useState(null);
+  const [data, setData] = useState([]);
 
-  const data = [];
+  const  getData = async()=> {
+    await fetch("/api/tasks", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      
+    }).then(response => response.json())
+    .then(data => setData(data));
+
+  }
+
+ 
+  
+  const deleteTodoById = async (id) => {
+
+    await fetch(`/api/tasks/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then(response => response.json())
+   
+
+  };
+  useEffect(() => {
+    getData()
+  }, [deleteTodoById])
 
   const handleChange = (e) => {
     setInput(e.target.value);
@@ -28,8 +54,10 @@ export default function Home() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ title: input, memo: "abc" }),
-    });
+      body: JSON.stringify({ title: input }),
+    }).then(response => response.json())
+    .then(data => setData((prevState)=> [...prevState, data]));
+
   };
 
   return (
@@ -71,6 +99,7 @@ export default function Home() {
                         isChecked={item?.checked}
                         content={item?.title}
                         memo={item?.memo}
+                       deleteTodoById={deleteTodoById}
                       />
                     )
                 )}
@@ -87,6 +116,7 @@ export default function Home() {
                       isPintle={item?.pintle}
                       content={item?.title}
                       memo={item?.memo}
+                      deleteTodoById={deleteTodoById}
                     />
                   )
               )}

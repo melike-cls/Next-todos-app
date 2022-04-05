@@ -1,25 +1,24 @@
 import { Popover } from "@headlessui/react";
-// import { mutate } from "swr";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HiDotsHorizontal, HiOutlineClipboard } from "react-icons/hi";
 import { AiTwotonePushpin } from "react-icons/ai";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 
 import styles from "../styles/Home.module.css";
 
-const fetch = (...args) => fetch(...args).then((res) => res.json());
 
-export default function PopupMenu({ id, pinValue }) {
+export default function PopupMenu({ id, value,deleteTodoById }) {
+  
   //Memo Input Control State
   const [isOpen, setIsOpen] = useState(false);
   //Memo Input Value State
   const [memoValue, setMemoValue] = useState(null);
 
   //Pin Todo By Id "PATCH" Function
-  const pinTodoById = async (id, pinValue) => {
+  const pinTodoById = async (id, value) => {
     await fetch("/api/tasks/" + `${id}`, {
       method: "PATCH",
-      body: JSON.stringify({ pintle: !pinValue }),
+      body: JSON.stringify({ pintle: !value }),
     });
     // mutate("/api/tasks");
   };
@@ -34,13 +33,9 @@ export default function PopupMenu({ id, pinValue }) {
     mutate("/api/tasks");
   };
 
-  //Delete Todo By Id "DELETE" Function
-  const deleteTodoById = async (id) => {
-    await fetch("/api/tasks/" + `${id}`, {
-      method: "DELETE",
-    });
-    mutate("/api/tasks");
-  };
+  
+
+  
 
   return (
     <Popover className={styles.popover}>
@@ -61,7 +56,7 @@ export default function PopupMenu({ id, pinValue }) {
       <Popover.Panel className={styles.popoverPanel}>
         <button
           className={styles.panelButton}
-          onClick={() => pinTodoById(id, pinValue)}
+          onClick={() => pinTodoById(id, value)}
         >
           <div className={styles.panelButtonArea}>
             <span className="pinColor">
