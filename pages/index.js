@@ -3,62 +3,14 @@ import Todo from "../components/Todo";
 import styles from "../styles/Home.module.css";
 import { useState, useEffect } from "react";
 import { AiOutlineAlignLeft } from "react-icons/ai";
+import useTodoLogic from "../hooks/useTodoLogic";
 
 export default function Home() {
-  const [input, setInput] = useState(null);
-  const [data, setData] = useState([]);
+  const { handleChange, handleKeyDown, data, getData } = useTodoLogic();
 
-  const  getData = async()=> {
-    await fetch("/api/tasks", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      
-    }).then(response => response.json())
-    .then(data => setData(data));
-
-  }
-
- 
-  
-  const deleteTodoById = async (id) => {
-
-    await fetch(`/api/tasks/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then(response => response.json())
-   
-
-  };
   useEffect(() => {
-    getData()
-  }, [deleteTodoById])
-
-  const handleChange = (e) => {
-    setInput(e.target.value);
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      handleTodo(input);
-      e.target.value = null;
-    }
-  };
-
-  const handleTodo = async (input) => {
-    await fetch("/api/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ title: input }),
-    }).then(response => response.json())
-    .then(data => setData((prevState)=> [...prevState, data]));
-
-  };
+    getData();
+  }, [data]);
 
   return (
     <div className={styles.container}>
@@ -91,35 +43,33 @@ export default function Home() {
               <div className={styles.pintle}>
                 {data?.map(
                   (item) =>
-                    item?.pintle && (
+                    item?.pinned && (
                       <Todo
                         key={item?.id}
                         id={item?.id}
-                        isPintle={true}
+                        isPinned={true}
                         isChecked={item?.checked}
                         content={item?.title}
                         memo={item?.memo}
-                       deleteTodoById={deleteTodoById}
                       />
                     )
                 )}
               </div>
-            </div>
-            <div className={styles.todos}>
-              {data?.map(
-                (item) =>
-                  !item?.pintle && (
-                    <Todo
-                      key={item?.id}
-                      id={item?.id}
-                      isChecked={item?.checked}
-                      isPintle={item?.pintle}
-                      content={item?.title}
-                      memo={item?.memo}
-                      deleteTodoById={deleteTodoById}
-                    />
-                  )
-              )}
+              <div className={styles.todos}>
+                {data?.map(
+                  (item) =>
+                    !item?.pinned && (
+                      <Todo
+                        key={item?.id}
+                        id={item?.id}
+                        isPinned={item?.pinned}
+                        isChecked={item?.checked}
+                        content={item?.title}
+                        memo={item?.memo}
+                      />
+                    )
+                )}
+              </div>
             </div>
           </div>
         </div>
