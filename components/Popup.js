@@ -3,66 +3,33 @@ import { useState, useEffect } from "react";
 import { HiDotsHorizontal, HiOutlineClipboard } from "react-icons/hi";
 import { AiTwotonePushpin } from "react-icons/ai";
 import { RiDeleteBin6Fill } from "react-icons/ri";
-
 import styles from "../styles/Home.module.css";
+import useTodoLogic from "../hooks/useTodoLogic";
 
-
-export default function PopupMenu({ id, value,deleteTodoById }) {
-  
-  //Memo Input Control State
-  const [isOpen, setIsOpen] = useState(false);
-  //Memo Input Value State
-  const [memoValue, setMemoValue] = useState(null);
-
-  //Pin Todo By Id "PATCH" Function
-  const pinTodoById = async (id, value) => {
-    await fetch("/api/tasks/" + `${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ pintle: !value }),
-    });
-    // mutate("/api/tasks");
-  };
-
-  //Add Memo By Id "PATCH" Function
-  const memoTodoById = async (id, memo) => {
-    await fetch("/api/tasks/" + `${id}`, {
-      method: "PATCH",
-      body: JSON.stringify({ memo: memo }),
-    });
-    setIsOpen(false);
-    mutate("/api/tasks");
-  };
-
-  
-
-  
+export default function PopupMenu({ id, isPinned }) {
+  const [memoValue, setMemoValue] = useState("");
+  const { deleteTodoById, memoTodoById, pinTodoById, isOpen, setIsOpen } =
+    useTodoLogic();
 
   return (
     <Popover className={styles.popover}>
       <Popover.Button className={styles.menuButton}>
         <span className="dropMenu">
-          <HiDotsHorizontal />
+          <HiDotsHorizontal color="#fff" fontSize="20px" />
         </span>
-
-        <style jsx>
-          {`
-            .dropMenu {
-              color: #a9b1ba;
-              font-size: 20px;
-            }
-          `}
-        </style>
       </Popover.Button>
       <Popover.Panel className={styles.popoverPanel}>
         <button
           className={styles.panelButton}
-          onClick={() => pinTodoById(id, value)}
+          onClick={() => pinTodoById(id, isPinned)}
         >
           <div className={styles.panelButtonArea}>
             <span className="pinColor">
               <AiTwotonePushpin />
             </span>
-            <span className={styles.buttonText}>Pin on the top</span>
+            <span className={styles.buttonText}>
+              {isPinned ? "UnPin on the top" : "Pin on the top"}
+            </span>
           </div>
         </button>
         <button className={styles.panelButton}>
@@ -75,6 +42,7 @@ export default function PopupMenu({ id, value,deleteTodoById }) {
             </span>
           </div>
         </button>
+
         {isOpen && (
           <div className={styles.addMemo}>
             <input
@@ -89,13 +57,13 @@ export default function PopupMenu({ id, value,deleteTodoById }) {
                 setMemoValue(null);
               }}
             >
-              O
+              OK
             </button>
             <button
               className={styles.memoButtonCancel}
               onClick={() => setIsOpen(false)}
             >
-              X
+              NO
             </button>
           </div>
         )}
